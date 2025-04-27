@@ -13,7 +13,7 @@ with DAG(
     start = DummyOperator(task_id='start')
     end = DummyOperator(task_id='end')
 
-    inicio >> fim
+    start >> end
 
 
     
