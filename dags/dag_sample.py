@@ -6,6 +6,7 @@ with DAG(
     dag_id='sample_dag',
     schedule_interval='@daily',
     catchup=False,
+    start_date=datetime(2024, 1, 1),  # <<< start_date obrigatório
     tags=['sample'],
 ) as dag:
 
