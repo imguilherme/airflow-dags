@@ -1,18 +1,22 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from datetime import datetime
+from airflow.utils.dates import days_ago
+import logging
 
-def hello():
-    print("Hello, world!")
+def hello_world():
+    logging.basicConfig(level=logging.DEBUG)  # Define nível de log, se necessário
+    logger = logging.getLogger("airflow.task")
+    logger.debug("Este é um log de DEBUG")
+    logger.info("Este é um log de INFO")
+    print("Mensagem comum via print()")  # Também aparece nos logs da UI
 
 with DAG(
-    dag_id="hello_world_dag",
-    start_date=datetime(2023, 1, 1),
+    dag_id="dag_com_debug",
+    start_date=days_ago(1),
     schedule_interval="@daily",
     catchup=False,
-    tags=["example"],
 ) as dag:
-    hello_task = PythonOperator(
-        task_id="say_hello",
-        python_callable=hello
+    debug_task = PythonOperator(
+        task_id="debug_task",
+        python_callable=hello_world
     )
