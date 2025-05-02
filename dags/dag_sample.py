@@ -2,13 +2,15 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
 import logging
+import random
 
 def hello_world():
     logging.basicConfig(level=logging.DEBUG)  # Define nível de log, se necessário
     logger = logging.getLogger("airflow.task")
     logger.debug("Este é um log de DEBUG")
     logger.info("Este é um log de INFO")
-    print("Mensagem comum via print()")  # Também aparece nos logs da UI
+    random_number = random.randint(0, 10)
+    print(f"Número sorteado: {random_number}")  # Também aparece nos logs da UI
 
 with DAG(
     dag_id="dag_com_debug",

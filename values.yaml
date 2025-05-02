@@ -1,18 +1,22 @@
-executor: "CeleryExecutor"
+executor: CeleryExecutor
 
 dags:
   gitSync:
     enabled: true
     repo: "https://github.com/imguilherme/airflow-dags.git"
-    branch: "main"
+    branch: main
     subPath: ""
     depth: 1
-    wait: 60  # Isso substitui o antigo "syncWait"
+    wait: 60
 
 webserver:
   webserverConfig: |
     from airflow import configuration as conf
     conf.set('webserver', 'worker_log_server_port', '8793')
+  defaultUser:
+    enabled: true
+    username: admin
+    password: admin
 
 logs:
   persistence:
