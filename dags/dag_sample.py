@@ -15,7 +15,7 @@ def hello_world():
 with DAG(
     dag_id="dag_com_debug",
     start_date=days_ago(1),
-    schedule_interval="@daily",
+    schedule_interval="*/5 * * * *",
     catchup=False,
 ) as dag:
     debug_task = PythonOperator(
