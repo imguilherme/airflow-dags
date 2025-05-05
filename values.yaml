@@ -1,13 +1,13 @@
-executor: CeleryExecutor
+executor: "CeleryExecutor"
 
 dags:
   gitSync:
     enabled: true
     repo: "https://github.com/imguilherme/airflow-dags.git"
-    branch: main
-    subPath: "dags"
+    branch: "main"
+    subPath: ""
     depth: 1
-    wait: 60
+    wait: 60  # Isso substitui o antigo "syncWait"
 
 webserver:
   webserverConfig: |
@@ -33,14 +33,3 @@ redis:
 
 workers:
   replicas: 1
-
-# Configuração do volume persistente para dados
-volumes:
-  - name: airflow-data
-    persistentVolumeClaim:
-      claimName: airflow-data-pvc
-
-volumeMounts:
-  - name: airflow-data
-    mountPath: /opt/airflow/data
-    subPath: data
