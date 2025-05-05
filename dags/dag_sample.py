@@ -5,10 +5,8 @@ import requests
 import os
 from datetime import datetime
 import urllib3
-import ssl
+import pandas as pd
 
-# Desabilitar avisos de SSL
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def download_car_csv():
     # URL do arquivo CSV
@@ -26,24 +24,35 @@ def download_car_csv():
     print(f"Iniciando download do arquivo CSV em: {url}")
     
     try:
-        # Configurações adicionais para lidar com SSL
         session = requests.Session()
-        session.verify = False
         session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         })
         
-        # Fazendo download do arquivo CSV
         response = session.get(url, timeout=30)
         response.raise_for_status()
         
-        # Salvando o arquivo
         with open(filepath, 'wb') as f:
             f.write(response.content)
         print(f"Arquivo salvo com sucesso em: {filepath}")
         
+        # Lendo o arquivo CSV com pandas
+        print("\nLendo o arquivo CSV com pandas...")
+        df = pd.read_csv(filepath, encoding='latin1', sep=';')
+        
+        # Exibindo informações do dataset
+        print(f"\nTotal de registros: {len(df)}")
+        print("\nColunas disponíveis:")
+        for col in df.columns:
+            print(f"- {col}")
+            
+        # Exibindo as primeiras 5 linhas
+        print("\nPrimeiras 5 linhas do dataset:")
+        print(df.head())
+        
+ 
     except Exception as e:
-        print(f"Erro ao baixar o arquivo do site: {str(e)}")
+        print(f"Erro ao baixar ou processar o arquivo do site: {str(e)}")
 
 with DAG(
     dag_id="dag_car_temas_ambientais",
