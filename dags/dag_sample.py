@@ -22,6 +22,7 @@ def download_car_csv():
     filename = f"temas_ambientais_{timestamp}.csv"
     filepath = os.path.join(output_dir, filename)
     
+    print(f"Iniciando download do arquivo CSV em: {url}")
     try:
         # Fazendo download do arquivo CSV com verify=False para ignorar problemas de SSL
         response = requests.get(url, verify=False)
