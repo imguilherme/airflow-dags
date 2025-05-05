@@ -12,7 +12,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def download_car_csv():
     # URL do arquivo CSV
-    url = "https://consultapublica.car.gov.br/dados-abertos/D.DLK.FRM.000.TEMAS_AMBIENTAIS.CSV"
+    url = "https://www12.senado.leg.br/transparencia/prestacao-de-contas/paginas/old-acoes-de-supervisao-controle-e-de-correicao-1/teste.csv/@@download/file/teste.csv"
     
     # Diretório para salvar o arquivo
     output_dir = "/opt/airflow/data/car"
