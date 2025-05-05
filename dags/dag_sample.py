@@ -4,6 +4,10 @@ from airflow.utils.dates import days_ago
 import requests
 import os
 from datetime import datetime
+import urllib3
+
+# Desabilitar avisos de SSL
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def download_car_csv():
     # URL do arquivo CSV
@@ -19,8 +23,8 @@ def download_car_csv():
     filepath = os.path.join(output_dir, filename)
     
     try:
-        # Fazendo download do arquivo CSV
-        response = requests.get(url)
+        # Fazendo download do arquivo CSV com verify=False para ignorar problemas de SSL
+        response = requests.get(url, verify=False)
         response.raise_for_status()
         
         # Salvando o arquivo

@@ -2,12 +2,7 @@ executor: "CeleryExecutor"
 
 dags:
   gitSync:
-    enabled: true
-    repo: "https://github.com/imguilherme/airflow-dags.git"
-    branch: "main"
-    subPath: ""
-    depth: 1
-    wait: 60  # Isso substitui o antigo "syncWait"
+    enabled: false
 
 webserver:
   webserverConfig: |
@@ -18,7 +13,13 @@ webserver:
     username: admin
     password: admin
   service:
-    type: LoadBalancer
+    type: ClusterIP
+    port: 8080
+  baseUrl: http://localhost:8080
+  persistence:
+    enabled: true
+    size: 10Gi
+    existingClaim: airflow-data-pvc
 
 logs:
   persistence:
@@ -33,3 +34,26 @@ redis:
 
 workers:
   replicas: 1
+  persistence:
+    enabled: true
+    size: 10Gi
+    existingClaim: airflow-data-pvc
+  env:
+    - name: AIRFLOW__LOGGING__WORKER_LOG_SERVER_PORT
+      value: "8793"
+    - name: AIRFLOW__LOGGING__WORKER_LOG_SERVER_HOST
+      value: "0.0.0.0"
+    - name: AIRFLOW__LOGGING__REMOTE_LOGGING
+      value: "True"
+    - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
+      value: "/opt/airflow/logs"
+    - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
+      value: "local_remote_logs"
+    - name: AIRFLOW__LOGGING__TASK_LOG_READER
+      value: "task"
+
+scheduler:
+  persistence:
+    enabled: true
+    size: 10Gi
+    existingClaim: airflow-data-pvc
