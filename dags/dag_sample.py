@@ -23,6 +23,7 @@ def download_car_csv():
     
     print(f"Iniciando download do arquivo CSV em: {url}")
     
+    raise Exception("teste")
     try:
         session = requests.Session()
         session.headers.update({
