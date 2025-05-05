@@ -33,3 +33,14 @@ redis:
 
 workers:
   replicas: 1
+
+# Configuração do volume persistente para dados
+volumes:
+  - name: airflow-data
+    persistentVolumeClaim:
+      claimName: airflow-data-pvc
+
+volumeMounts:
+  - name: airflow-data
+    mountPath: /opt/airflow/data
+    subPath: data

@@ -6,7 +6,7 @@ import requests
 import os
 from datetime import datetime
 
-def hello_world():
+def download_car_csv():
     logging.basicConfig(level=logging.DEBUG)
     logger = logging.getLogger("airflow.task")
     
@@ -80,6 +80,6 @@ with DAG(
     catchup=False,
 ) as dag:
     debug_task = PythonOperator(
-        task_id="debug_task",
-        python_callable=hello_world
+        task_id="donwload_car_csv",
+        python_callable=download_car_csv
     )
