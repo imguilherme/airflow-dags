@@ -5,6 +5,7 @@ import requests
 import os
 from datetime import datetime
 import urllib3
+import ssl
 
 # Desabilitar avisos de SSL
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -23,9 +24,17 @@ def download_car_csv():
     filepath = os.path.join(output_dir, filename)
     
     print(f"Iniciando download do arquivo CSV em: {url}")
+    
     try:
-        # Fazendo download do arquivo CSV com verify=False para ignorar problemas de SSL
-        response = requests.get(url, verify=False)
+        # Configurações adicionais para lidar com SSL
+        session = requests.Session()
+        session.verify = False
+        session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        })
+        
+        # Fazendo download do arquivo CSV
+        response = session.get(url, timeout=30)
         response.raise_for_status()
         
         # Salvando o arquivo
