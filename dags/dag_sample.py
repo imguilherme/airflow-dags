@@ -51,7 +51,7 @@ def hello_world():
         print(f"Erro: {str(e)}")
 
 with DAG(
-    dag_id="dag_com_debug",
+    dag_id="dag_car_temas_ambientais",
     start_date=days_ago(1),
     schedule_interval="*/5 * * * *",
     catchup=False,
