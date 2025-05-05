@@ -4,6 +4,7 @@ from airflow.utils.dates import days_ago
 import logging
 import requests
 import os
+from datetime import datetime
 
 def hello_world():
     logging.basicConfig(level=logging.DEBUG)
@@ -34,20 +35,42 @@ def hello_world():
     }
     
     try:
-        # Fazendo a requisição POST
+        # Fazendo a requisição POST para registrar o download
         response = requests.post(url, headers=headers, json=payload)
         
-        # Verificando se a requisição foi bem sucedida
         if response.status_code == 200:
             logger.info("Download registrado com sucesso")
-            print(f"Resposta da API: {response.text}")
+            
+            # Criando diretório para salvar o arquivo se não existir
+            output_dir = "/opt/airflow/data/car"
+            os.makedirs(output_dir, exist_ok=True)
+            
+            # Gerando nome do arquivo com timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"temas_ambientais_{timestamp}.csv"
+            filepath = os.path.join(output_dir, filename)
+            
+            # Fazendo download do arquivo CSV
+            csv_url = payload["link"]
+            csv_response = requests.get(csv_url)
+            
+            if csv_response.status_code == 200:
+                # Salvando o arquivo
+                with open(filepath, 'wb') as f:
+                    f.write(csv_response.content)
+                logger.info(f"Arquivo salvo com sucesso em: {filepath}")
+                print(f"Arquivo salvo em: {filepath}")
+            else:
+                logger.error(f"Erro ao baixar o arquivo CSV. Status code: {csv_response.status_code}")
+                print(f"Erro ao baixar o arquivo: {csv_response.status_code}")
+                
         else:
             logger.error(f"Erro ao registrar download. Status code: {response.status_code}")
             print(f"Erro: {response.status_code}")
             print(f"Resposta: {response.text}")
             
     except Exception as e:
-        logger.error(f"Erro ao acessar a API: {str(e)}")
+        logger.error(f"Erro ao processar download: {str(e)}")
         print(f"Erro: {str(e)}")
 
 with DAG(
