@@ -34,7 +34,7 @@ def download_car_csv():
         print(f"Arquivo salvo com sucesso em: {filepath}")
         
     except Exception as e:
-        print(f"Erro ao baixar o arquivo: {str(e)}")
+        print(f"Erro ao baixar o arquivo do site: {str(e)}")
 
 with DAG(
     dag_id="dag_car_temas_ambientais",
